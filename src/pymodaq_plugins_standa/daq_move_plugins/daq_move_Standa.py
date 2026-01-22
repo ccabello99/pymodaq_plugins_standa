@@ -33,8 +33,7 @@ class DAQ_Move_Standa(DAQ_Move_base):
                     {'title': 'Refresh Device List:', 'name': 'refresh_devices', 'type': 'bool_push', 'value': False},
                     {'title': 'Connected Devices:', 'name': 'connected_devices', 'type': 'list', 'limits': devices['ports']},
                     {'title': 'Selected Device:', 'name': 'selected_device', 'type': 'str', 'value': '', 'readonly': True},
-                    {"title": "Device Serial Number", "name": "device_serial_number", "type": "str", "value": "", 'readonly': True},
-                    {'title': 'Baudrate:', 'name': 'baudrate', 'type': 'str', 'value': '115200', 'readonly': True}
+                    {"title": "Device Serial Number", "name": "device_serial_number", "type": "str", "value": "", 'readonly': True}
                 ]},
                 {'title': 'Motor Info:', 'name': 'motor_info', 'type': 'group', 'children': [
                     {'title': 'Engine Type:', 'name': 'engine_type', 'type': 'str', 'value': '', 'readonly': True},
@@ -260,7 +259,7 @@ class DAQ_Move_Standa(DAQ_Move_base):
         # Set initial timeout
         self.settings.child('timeout').setValue(100)
 
-        info = f"Standa actuator on port {self.controller.port} initialized with baudrate {self.manager._baudrate}"
+        info = f"Standa actuator on port {self.controller.port} initialized"
         return info, initialized
 
     def move_abs(self, position: DataActuator):
