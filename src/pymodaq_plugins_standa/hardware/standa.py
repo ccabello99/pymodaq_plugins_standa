@@ -1,5 +1,13 @@
 import platform
 from qtpy import QtCore
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    message="pkg_resources is deprecated as an API"
+)
+
 from pylablib.devices import Standa
 from serial.tools import list_ports
 import time
@@ -9,35 +17,31 @@ if not hasattr(QtCore, "pyqtSignal"):
 
 
 class StandaManager:
-    def __init__(self, baudrate):
+    def __init__(self):
         self.devices = None
         self.connections = []
         self.interfaces = []
-        self._baudrate = baudrate
 
     def probe_standa_ports(self):
         self.devices = {'ports': [], 'serial_numbers': []}
-        ports = list_ports.comports()
 
-        for port in ports:
-            try:
-                conn = Standa.Standa8SMC((port.device, self._baudrate))
-                if platform.system() == 'Windows':
-                    if port.serial_number is not None:
-                        self.devices['ports'].append(port.device)
-                        self.devices['serial_numbers'].append(port.serial_number)
-                else:
-                    if 'XIMC' in port.manufacturer:
-                        self.devices['ports'].append(port.device)
-                        self.devices['serial_numbers'].append(port.serial_number)
-                conn.close()
-            except Exception as e:
-                pass
+        for port in list_ports.comports():
+            if platform.system() == "Windows":
+                if port.serial_number is None:
+                    continue
+            else:
+                if not (port.manufacturer and "XIMC" in port.manufacturer):
+                    continue
+
+            self.devices['ports'].append(port.device)
+            self.devices['serial_numbers'].append(port.serial_number)
+
         return self.devices
 
     def connect(self, port):
         try:
-            conn = Standa.Standa8SMC((port, self._baudrate))
+            print("here")
+            conn = Standa.Standa8SMC(port)
             self.interfaces.append(conn)
             self.connections.append(port)
         except Exception as e:

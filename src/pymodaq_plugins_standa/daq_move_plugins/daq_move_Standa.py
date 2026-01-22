@@ -25,7 +25,7 @@ class DAQ_Move_Standa(DAQ_Move_base):
     _epsilon: Union[float, List[float]] = 1  # Minimum step/microstep
 
     # Initialize communication
-    manager = StandaManager(baudrate=115200)
+    manager = StandaManager()
     devices = manager.probe_standa_ports()
 
     params = [
