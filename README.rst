@@ -15,7 +15,7 @@ pymodaq_plugins_standa
     :target: https://github.com/ccabello99/pymodaq_plugins_standa/actions/workflows/Test.yml
 
 
-PyMoDAQ plugin for interfacing with Trinamic stepper motor control units.
+PyMoDAQ plugin for interfacing with Standa controllers.
 
 
 Authors
