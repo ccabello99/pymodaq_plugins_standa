@@ -50,13 +50,13 @@ class DAQ_Move_Standa(DAQ_Move_base):
                     {'title': 'Home Motor:', 'name': 'home_motor', 'type': 'bool_push', 'value': False},
                 ]},
                 {'title': 'Motion Control:', 'name': 'motion', 'type': 'group', 'children': [
-                    {'title': 'Speed:', 'name': 'speed', 'type': 'int', 'value': 1000, 'limits': [1, 100000]},
-                    {'title': 'Acceleration:', 'name': 'acceleration', 'type': 'int', 'value': 1000, 'limits': [1, 100000]},
-                    {'title': 'Deceleration:', 'name': 'deceleration', 'type': 'int', 'value': 1000, 'limits': [1, 100000]},
+                    {'title': 'Speed:', 'name': 'speed', 'type': 'int', 'value': 128000, 'limits': [1, 512000]}, # Be careful going to maximum, respect your motor specs
+                    {'title': 'Acceleration:', 'name': 'acceleration', 'type': 'int', 'value': 1000, 'limits': [1, 30000000]},
+                    {'title': 'Deceleration:', 'name': 'deceleration', 'type': 'int', 'value': 1000, 'limits': [1, 30000000]},
                     {'title': 'Antiplay:', 'name': 'antiplay', 'type': 'int', 'value': 0, 'limits': [0, 10000]},
                 ]},
                 {'title': 'Power Settings:', 'name': 'power', 'type': 'group', 'children': [
-                    {'title': 'Hold Current:', 'name': 'hold_current', 'type': 'int', 'value': 50, 'limits': [0, 255]},
+                    {'title': 'Hold Current:', 'name': 'hold_current', 'type': 'int', 'value': 50, 'limits': [0, 255]}, # Be very careful with this value, it can lead to permanent damage to the motor if too high
                     {'title': 'Current Reduction:', 'name': 'current_reduction', 'type': 'group', 'children': [
                         {'title': 'Enable:', 'name': 'reduct_enabled', 'type': 'bool', 'value': False},
                         {'title': 'Delay (s):', 'name': 'reduct_delay', 'type': 'float', 'value': 1.0, 'limits': [0, 60]},
