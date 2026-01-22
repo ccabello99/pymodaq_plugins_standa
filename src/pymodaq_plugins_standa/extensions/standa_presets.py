@@ -201,16 +201,94 @@ class StandaPresets(CustomExt):
                        "Refresh connection to actuator")
         self.add_action('update_position', 'Update Position', 'run2',
                        "Update current position display")
+        self.add_action('save_presets', 'Save Presets', 'save2',
+                        "Save presets to JSON")
+        self.add_action('load_presets', 'Load Presets', 'load2',
+                        "Load presets from JSON")        
 
     def connect_things(self):
         """Connect actions and signals to methods"""
         self.connect_action('quit', self.quit_fun)
         self.connect_action('refresh_actuator', self.refresh_actuator)
         self.connect_action('update_position', self.update_current_position)
+        self.connect_action('save_presets', self.save_presets_to_json)
+        self.connect_action('load_presets', self.load_presets_from_json)        
 
-    def setup_menu(self, menubar: QtWidgets.QMenuBar = None):
-        """Setup the menu bar (optional)"""
-        pass
+    def _collect_presets(self) -> dict:
+        presets = {}
+        for i in range(1, 5):
+            path = ('presets', f'preset{i}')
+            presets[f'preset{i}'] = {
+                'enabled': self.settings[path + ('enabled',)],
+                'label': self.settings[path + ('label',)],
+                'position': self.settings[path + ('position',)],
+            }
+        return {'presets': presets}
+    
+    def _apply_presets(self, data: dict):
+        presets = data.get('presets', {})
+        for i in range(1, 5):
+            key = f'preset{i}'
+            if key not in presets:
+                continue
+
+            preset = presets[key]
+            path = ('presets', key)
+
+            self.settings.child(*path, 'enabled').setValue(
+                preset.get('enabled', True))
+            self.settings.child(*path, 'label').setValue(
+                preset.get('label', f'Preset {i}'))
+            self.settings.child(*path, 'position').setValue(
+                preset.get('position', 0.0))
+
+        self.update_button_states()
+
+    def save_presets_to_json(self):
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self.mainwindow,
+            "Save Preset File",
+            str(Path.home()),
+            "JSON Files (*.json);;All Files (*)"
+        )
+
+        if not filename:
+            return  # user cancelled
+
+        if not filename.lower().endswith('.json'):
+            filename += '.json'
+
+        try:
+            import json
+            data = self._collect_presets()
+
+            with open(filename, 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.log_message(f"Presets saved to:\n{filename}")
+        except Exception as e:
+            self.log_message(f"Error saving presets: {e}", level='error')
+
+    def load_presets_from_json(self):
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self.mainwindow,
+            "Load Preset File",
+            str(Path.home()),
+            "JSON Files (*.json);;All Files (*)"
+        )
+
+        if not filename:
+            return  # user cancelled
+
+        try:
+            import json
+            with open(filename, 'r') as f:
+                data = json.load(f)
+
+            self._apply_presets(data)
+            self.log_message(f"Presets loaded from:\n{filename}")
+        except Exception as e:
+            self.log_message(f"Error loading presets: {e}", level='error')
 
     def value_changed(self, param):
         """Handle parameter value changes"""
