@@ -1,18 +1,18 @@
-pymodaq_plugins_trinamic
+pymodaq_plugins_standa
 ###########################################
 
 .. the following must be adapted to your developed package, links to pypi, github  description...
 
-.. image:: https://img.shields.io/pypi/v/pymodaq_plugins_trinamic.svg
-   :target: https://pypi.org/project/pymodaq_plugins_trinamic/
+.. image:: https://img.shields.io/pypi/v/pymodaq_plugins_standa.svg
+   :target: https://pypi.org/project/pymodaq_plugins_standa/
    :alt: Latest Version
 
-.. image:: https://github.com/ccabello99/pymodaq_plugins_trinamic/workflows/Upload%20Python%20Package/badge.svg
-   :target: https://github.com/ccabello99/pymodaq_plugins_trinamic
+.. image:: https://github.com/ccabello99/pymodaq_plugins_standa/workflows/Upload%20Python%20Package/badge.svg
+   :target: https://github.com/ccabello99/pymodaq_plugins_standa
    :alt: Publication Status
 
-.. image:: https://github.com/ccabello99/pymodaq_plugins_trinamic/actions/workflows/Test.yml/badge.svg
-    :target: https://github.com/ccabello99/pymodaq_plugins_trinamic/actions/workflows/Test.yml
+.. image:: https://github.com/ccabello99/pymodaq_plugins_standa/actions/workflows/Test.yml/badge.svg
+    :target: https://github.com/ccabello99/pymodaq_plugins_standa/actions/workflows/Test.yml
 
 
 PyMoDAQ plugin for interfacing with Trinamic stepper motor control units.
@@ -32,7 +32,7 @@ Below is the list of instruments included in this plugin
 Actuators
 +++++++++
 
-* **Trinamic**: control of Trinamic stepper control units
+* **Standa**: control of Standa 8SMC controller
 
 Viewer0D
 ++++++++
@@ -53,7 +53,6 @@ Extensions
 
 Installation instructions
 =========================
-* Tested on PyMoDAQ version 5.0.6
+* Tested on PyMoDAQ version 5.1.0
 * Tested on Windows 11 and Ubuntu 24.04
-* Currently this is only compatible with the TMCM-1311 Trinamic stepper motor controller, but it can be extended to other controllers fairly straightforwardly in a local installation.
 

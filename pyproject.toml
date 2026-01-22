@@ -6,14 +6,14 @@ h5exporters = false  # true if plugin contains custom h5 file exporters
 scanners = false  # true if plugin contains custom scan layout (daq_scan extensions)
 
 [urls]
-package-url = 'https://github.com/ccabello99/pymodaq_plugins_trinamic'
+package-url = 'https://github.com/ccabello99/pymodaq_plugins_standa'
 
 [project]
-name = "pymodaq_plugins_trinamic"
-description = 'PyMoDAQ module for communication and readout from Trinamic stepper motor control units'
+name = "pymodaq_plugins_standa"
+description = 'PyMoDAQ plugin for communication and readout from Standa controllers using PyLabLib'
 dependencies = [
     'pymodaq>=4.4.7',
-    'pytrinamic'
+    'pylablib'
 ]
 
 authors = [
