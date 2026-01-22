@@ -13,7 +13,9 @@ name = "pymodaq_plugins_standa"
 description = 'PyMoDAQ plugin for communication and readout from Standa controllers using PyLabLib'
 dependencies = [
     'pymodaq>=4.4.7',
-    'pylablib'
+    'pylablib',
+    'pyserial'>=3.5,
+    'pyvisa>=1.16.1'
 ]
 
 authors = [

@@ -23,8 +23,9 @@ class StandaManager:
             try:
                 conn = Standa.Standa8SMC((port.device, self._baudrate))
                 if platform.system() == 'Windows':
-                    self.devices['ports'].append(port.device)
-                    self.devices['serial_numbers'].append(port.serial_number)
+                    if port.serial_number is not None:
+                        self.devices['ports'].append(port.device)
+                        self.devices['serial_numbers'].append(port.serial_number)
                 else:
                     if 'XIMC' in port.manufacturer:
                         self.devices['ports'].append(port.device)
