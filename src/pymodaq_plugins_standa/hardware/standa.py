@@ -40,7 +40,6 @@ class StandaManager:
 
     def connect(self, port):
         try:
-            print("here")
             conn = Standa.Standa8SMC(port)
             self.interfaces.append(conn)
             self.connections.append(port)
