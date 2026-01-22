@@ -1,6 +1,7 @@
 from qtpy import QtWidgets, QtCore
 from pathlib import Path
 from typing import Optional
+import json
 
 from pymodaq_gui import utils as gutils
 from pymodaq_utils.config import Config
@@ -18,6 +19,12 @@ config_pymodaq = PyMoConfig()
 
 EXTENSION_NAME = 'Standa Presets'
 CLASS_NAME = 'StandaPresets'
+
+class StandaPresetsConfig(Config):
+    config_name = 'standa_presets'
+    config_template_path = None
+
+standa_config = StandaPresetsConfig()
 
 
 class StandaPresets(CustomExt):
@@ -245,50 +252,48 @@ class StandaPresets(CustomExt):
         self.update_button_states()
 
     def save_presets_to_json(self):
+        start_dir = self.get_last_directory()
+
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
             self.mainwindow,
             "Save Preset File",
-            str(Path.home()),
+            start_dir,
             "JSON Files (*.json);;All Files (*)"
         )
 
         if not filename:
-            return  # user cancelled
+            return
 
         if not filename.lower().endswith('.json'):
             filename += '.json'
 
-        try:
-            import json
-            data = self._collect_presets()
+        self.set_last_directory(filename)
 
-            with open(filename, 'w') as f:
-                json.dump(data, f, indent=4)
+        with open(filename, 'w') as f:
+            json.dump(self._collect_presets(), f, indent=4)
 
-            self.log_message(f"Presets saved to:\n{filename}")
-        except Exception as e:
-            self.log_message(f"Error saving presets: {e}", level='error')
+        self.log_message(f"Presets saved to:\n{filename}")
 
     def load_presets_from_json(self):
+        start_dir = self.get_last_directory()
+
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self.mainwindow,
             "Load Preset File",
-            str(Path.home()),
+            start_dir,
             "JSON Files (*.json);;All Files (*)"
         )
 
         if not filename:
-            return  # user cancelled
+            return
 
-        try:
-            import json
-            with open(filename, 'r') as f:
-                data = json.load(f)
+        self.set_last_directory(filename)
 
-            self._apply_presets(data)
-            self.log_message(f"Presets loaded from:\n{filename}")
-        except Exception as e:
-            self.log_message(f"Error loading presets: {e}", level='error')
+        with open(filename, 'r') as f:
+            data = json.load(f)
+
+        self._apply_presets(data)
+        self.log_message(f"Presets loaded from:\n{filename}")
 
     def value_changed(self, param):
         """Handle parameter value changes"""
@@ -446,10 +451,25 @@ class StandaPresets(CustomExt):
         else:
             logger.info(message)
 
+    def get_last_directory(self, default=None):
+        try:
+            last_dir = standa_config[('last_directory',)]
+            if last_dir and Path(last_dir).exists():
+                return last_dir
+        except Exception:
+            pass
+
+        return default or str(Path.home())
+
+    def set_last_directory(self, filepath: str):
+        directory = str(Path(filepath).parent)
+
+        standa_config[('last_directory',)] = directory
+        standa_config.save()
+
     def quit_fun(self):
         """Close the extension"""
         self.mainwindow.close()
-
 
 def main():
     from pymodaq_gui.utils.utils import mkQApp
