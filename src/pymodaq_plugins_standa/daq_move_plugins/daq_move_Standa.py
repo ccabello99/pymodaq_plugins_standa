@@ -301,7 +301,11 @@ class DAQ_Move_Standa(DAQ_Move_base):
 
     def stop_motion(self):
         """Stop the actuator and emits move_done signal"""
-        self.controller.stop(immediate=False)
+        self.controller.stop()
+        time.sleep(0.05)  # Brief delay to ensure motor has stopped
+        actual_pos = self.get_actuator_value()
+        self.current_position = actual_pos
+        self.target_value = actual_pos  # Reset target to current position
         self.move_done()
         self.emit_status(ThreadCommand('Update_Status', ['Stop motion']))
 
